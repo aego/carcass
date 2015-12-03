@@ -2,7 +2,7 @@
   "name": "carcass",
   "version": "0.0.1",
   "description": "Simple node.js carcass for building vk.com iframe applications",
-  "main": "application.js",
+  "main": "carcass.js",
   "scripts": {
     "test": "test"
   },
