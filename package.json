@@ -1,0 +1,24 @@
+{
+  "name": "carcass",
+  "version": "0.0.1",
+  "description": "Simple node.js carcass for building vk.com iframe applications",
+  "main": "application.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aego/carcass.git"
+  },
+  "keywords": [
+    "node.js",
+    "vk",
+    "application",
+    "carcase"
+  ],
+  "author": "Aego",
+  "license": "GNU 2",
+  "bugs": {
+    "url": "https://github.com/aego/carcass/issues"
+  }
+}
