@@ -1,4 +1,4 @@
-var url = require("url");
+var Router = require("./router/router");
 
 /**
  * @param port
@@ -7,23 +7,26 @@ var url = require("url");
 function Server(port) {
   this.port = port;
   this.http = require("http");
+  this.router = new Router();
 }
 
 /**
- * @param request
- * @param response
+ * @param router
+ * @return {Function}
  */
-Server.prototype.onRequest = function onRequest(request, response) {
-  var parsedUrl = url.parse(request.url);
+Server.prototype.onRequest = function onRequest(router) {
+  return function(request, response) {
+    var routerResponse = router.route(request);
 
-  response.writeHead(200, {"Content-Type": "text/html"});
-  response.write("Hi! Url: '" + parsedUrl.pathname + "'");
-  response.end();
+    response.writeHead(routerResponse.getHttpCode(), {"Content-Type": "text/html"});
+    response.write(routerResponse.getContent());
+    response.end();
+  }
 };
 
 Server.prototype.start = function start() {
   console.log("Binding server on port " + this.port);
-  this.http.createServer(this.onRequest).listen(this.port);
+  this.http.createServer(this.onRequest(this.router)).listen(this.port);
 };
 
 module.exports = Server;

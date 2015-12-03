@@ -4,5 +4,6 @@
   },
   "http": {
     "port": 8888
-  }
+  },
+  "name" : "ApplicationName"
 }
