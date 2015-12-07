@@ -1,4 +1,5 @@
 var fs = require("fs");
+var path = require('path');
 
 function Config() {
   var configPath = './config';
@@ -15,6 +16,8 @@ function Config() {
 
     readConfigFile(fileInDirectory, fileContents);
   });
+
+  this.app.dir.root = path.dirname(require.main.filename);
 
   /**
    * @param fileName

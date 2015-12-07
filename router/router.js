@@ -1,18 +1,18 @@
 var RouterResponse = require('./router-response');
+var PageProcessor = require('../processor/page-processor');
+var ActionProcessor = require('../processor/action-processor');
 var url = require("url");
-var fs = require('fs');
 
 /**
- * @param {Config} config
  * @constructor
  */
-function Router(config) {
+function Router() {
   this.REQUEST_TYPE_ACTION = 'action';
   this.REQUEST_TYPE_PAGE = 'page';
 
-  this.config = config;
   this.currentRequest = null;
   this.response = RouterResponse;
+  this.processor = null;
 }
 
 /**
@@ -27,20 +27,51 @@ Router.prototype.route = function(request) {
 };
 
 Router.prototype.processRequest = function() {
-//{"protocol":null,"slashes":null,"auth":null,"host":null,"port":null,"hostname":null,"hash":null,"search":"?v1=d1&v2=d3","query":"v1=d1&v2=d3","pathname":"/frefeefrf/frf","path":"/frefeefrf/frf?v1=d1&v2=d3","href":"/frefeefrf/frf?v1=d1&v2=d3"}
   var parsedUrl = url.parse(this.currentRequest.url);
   var way = this.getRequestedWay(parsedUrl.pathname);
   var requestType = this.getRequestType(way);
+  this.initProcessor(requestType, way);
 
-  if (requestType == this.REQUEST_TYPE_ACTION) {
-    this.processPageRequest(way);
-  } else if (requestType == this.REQUEST_TYPE_PAGE) {
-    this.processActionRequest(way);
+  if (this.processor && this.processor.pageExists()) {
+    this.response.setContent(this.processor.getPageContent());
+    this.response.setHttpCode(200);
   } else {
-    process.error("Could not determinate request type.");
+    this.errorNotFound();
+  }
+};
+
+Router.prototype.errorNotFound = function() {
+  var content = "Sorry, page not found :(";
+
+  if (config.app.notFoundPage) {
+    var processor = new PageProcessor([config.app.notFoundPage]);
+    content = processor.getPageContent();
   }
 
-  this.response.setContent(requestType + '\n' + JSON.stringify(way));
+  this.response.setContent(content);
+  this.response.setHttpCode(404);
+};
+
+/**
+ * @param {string} requestType
+ */
+Router.prototype.initProcessor = function(requestType, way) {
+  if (requestType == this.REQUEST_TYPE_ACTION) {
+    this.processor = new ActionProcessor(way);
+  } else if (requestType == this.REQUEST_TYPE_PAGE) {
+    this.processor = new PageProcessor(way);
+  } else {
+    this.responseError("Could not determinate request type.");
+  }
+};
+
+/**
+ * @todo: tmp, need refactor
+ * @param {string} errorText
+ */
+Router.prototype.responseError = function (errorText) {
+  this.response.setHttpCode(500);
+  this.response.setContent(errorText);
 };
 
 /**
@@ -57,14 +88,6 @@ Router.prototype.getRequestedWay = function(pathname) {
   });
 
   return resultWay;
-};
-
-Router.prototype.processPageRequest = function(askedWay) {
-  
-};
-
-Router.prototype.processActionRequest = function (askedWay) {
-  
 };
 
 /**
