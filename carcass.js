@@ -28,8 +28,8 @@ var Carcass = {
    * @private
    */
   _initServer: function() {
-    this.server = new Server(this.config.app.http.port);
-    this.server.start();
+    this.server = new Server(this.config.app.http.port, this.config);
+    this.server.start(this.config);
     console.log("Carcass has been started!");
   }
 };

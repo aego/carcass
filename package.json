@@ -20,5 +20,8 @@
   "license": "GNU 2",
   "bugs": {
     "url": "https://github.com/aego/carcass/issues"
+  },
+  "dependencies": {
+    "mongodb" : ">=2.0.0"
   }
 }

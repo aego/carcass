@@ -4,10 +4,11 @@ var Router = require("./router/router");
  * @param port
  * @constructor
  */
-function Server(port) {
+function Server(port, config) {
+  this.config = config;
   this.port = port;
   this.http = require("http");
-  this.router = new Router();
+  this.router = new Router(config);
 }
 
 /**

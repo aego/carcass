@@ -5,5 +5,7 @@
   "http": {
     "port": 8888
   },
-  "name" : "ApplicationName"
+  "name" : "ApplicationName",
+  "indexPage" : "index.html",
+  "notFoundPage" : "404.html"
 }
