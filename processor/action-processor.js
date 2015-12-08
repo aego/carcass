@@ -1,13 +1,18 @@
+
+
 /**
  * @param {object} way
- * @param {object} config
- * @param {object} data
+ * @param {object|undefined} data
  * @constructor
  */
-function ActionProcessor(way, config, data) {
+function ActionProcessor(way, data) {
+  if (!data) {
+    data = [];
+  }
+
+  this._fileLink = null;
   this.way = way;
-  if (config) this.config = config;
-  if (data) this.data = data;
+  this.data = data;
 }
 
 ActionProcessor.prototype._getActionFileLink = function () {

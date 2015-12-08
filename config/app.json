@@ -1,13 +1,16 @@
 {
   "dir": {
-    "page": "./page",
-    "module": "./module",
-    "static": "./static"
+    "page": "/page",
+    "module": "/module",
+    "static": "/static"
   },
   "http": {
     "port": 8888
   },
-  "name" : "ApplicationName",
-  "indexPage" : "index.html",
-  "notFoundPage" : "404.html"
+  "template": {
+    "extensions": ["html"]
+  },
+  "name": "ApplicationName",
+  "indexPage": "index.html",
+  "notFoundPage": "404.html"
 }

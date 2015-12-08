@@ -54,6 +54,7 @@ Router.prototype.errorNotFound = function() {
 
 /**
  * @param {string} requestType
+ * @param {object} way
  */
 Router.prototype.initProcessor = function(requestType, way) {
   if (requestType == this.REQUEST_TYPE_ACTION) {
