@@ -1,23 +1,40 @@
 var path = require("path");
 var fs = require("fs");
+var swig = require("swig");
 
 /**
  * @param {object} way
- * @param {object} config
  * @param {object} data
  * @constructor
  */
-function PageProcessor(way, config, data) {
+function PageProcessor(way, data) {
   this._fileLink = null;
 
   if (!data) {
     data = [];
   }
 
-  this.way = way;
+  this.way = this._preprocessWay(way);
   this.data = data;
 }
 
+/**
+ * @param {[]} way
+ * @return {[]}
+ * @private
+ */
+PageProcessor.prototype._preprocessWay = function(way) {
+  if (way.length == 0 && config.app.indexPage) {
+    way = [config.app.indexPage];
+  }
+
+  return way;
+};
+
+/**
+ * @return {null|string|*}
+ * @private
+ */
 PageProcessor.prototype._getPageFileLink = function () {
   var PPObject = this;
 
@@ -27,7 +44,7 @@ PageProcessor.prototype._getPageFileLink = function () {
 
     if (fs.existsSync(link)) {
       this._fileLink = link;
-    } else if(config.app.template.extensions){
+    } else if(config.app.template.extensions) {
       config.app.template.extensions.forEach(function(extension) {
         var stepLink = link + '.' + extension;
 
@@ -41,12 +58,18 @@ PageProcessor.prototype._getPageFileLink = function () {
   return this._fileLink;
 };
 
+/**
+ * @return {boolean}
+ */
 PageProcessor.prototype.pageExists = function() {
   return fs.existsSync(this._getPageFileLink());
 };
 
+/**
+ * @return {string}
+ */
 PageProcessor.prototype.getPageContent = function() {
-  return JSON.stringify(this.way) + '\n' + this._getPageFileLink();
+  return swig.renderFile(this._getPageFileLink(), {data: this.data, config: config});
 };
 
 module.exports = PageProcessor;
