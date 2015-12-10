@@ -21,8 +21,15 @@ var Carcass = {
    * @private
    */
   _initServer: function() {
-    this.server = new Server(config.app.http.port);
-    this.server.start();
+    try {
+      this.server = new Server(config.app.http.port);
+      this.server.start();
+    } catch (err) {
+      console.log('Error throwed!');
+      console.log(err);
+    }
+
+
     console.log("Carcass has been started!");
   }
 };
